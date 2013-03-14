@@ -44,9 +44,11 @@ module Sprockets
     # Directives in comments after the first non-whitespace line
     # of code will not be processed.
     #
+
     HEADER_PATTERN = /
       \A (
         (?m:\s*) (
+          (?:<%\s?\#\s?encoding.*%>\s*\n) |
           (\/\* (?m:.*?) \*\/) |
           (\#\#\# (?m:.*?) \#\#\#) |
           (\/\/ .* \n?)+ |
@@ -73,11 +75,12 @@ module Sprockets
 
     def prepare
       @pathname = Pathname.new(file)
-
       @header = data[HEADER_PATTERN, 0] || ""
+
       @body   = $' || data
       # Ensure body ends in a new line
       @body  += "\n" if @body != "" && @body !~ /\n\Z/m
+
 
       @included_pathnames = []
       @compat             = false

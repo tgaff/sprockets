@@ -36,6 +36,17 @@ class DirectiveProcessorTest < Sprockets::TestCase
     end
   end
 
+  test "allows magic comment on first line" do
+    directive_parser("magic_comment").tap do |parser|
+      assert_equal "<% # encoding: utf-8 %>\n// Header\n//\n\n\n//\n\n(function() {\n})();\n", parser.processed_source
+      assert_equal [
+        [4, "require", "a"],
+        [5, "require", "b"],
+        [7, "require", "c"],
+      ], parser.directives
+    end
+  end
+
   test "header comment without directives is unmodified" do
     directive_parser("comment_without_directives").tap do |parser|
       assert_equal "/*\n * Comment\n */\n\n(function() {\n})();\n", parser.processed_source
