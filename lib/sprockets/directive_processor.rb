@@ -303,6 +303,7 @@ module Sprockets
             elsif stat(pathname).directory?
               context.depend_on(pathname)
             elsif context.asset_requirable?(pathname)
+              puts "sprockets require_treed #{pathname}"
               context.require_asset(pathname)
             end
           end
